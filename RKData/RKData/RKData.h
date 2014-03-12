@@ -5,11 +5,6 @@
 @interface RKData : NSObject
 @end
 
-@protocol RKCache <NSObject>
-- (id)objectForKey:(id)key;
-- (void)setObject:(id)object forKey:(id)key;
-@end
-
 @interface RKEntity : NSObject
 @end
 
@@ -21,6 +16,19 @@
 - (RKEntity *)value;
 @end
 
+@protocol RKCache <NSObject>
+- (id)objectForKey:(id)key;
+- (void)setObject:(id)object forKey:(id)key;
+@end
+
+typedef NSUInteger(^RKEntityCacheKeyGenerator)(id<RKEntityDescription>);
+
+@protocol RKNetwork <NSObject>
+- (void)executeRequest:(NSURLRequest *)request
+              callback:(void(^)(NSURLResponse *, NSError *))callback
+                 queue:(dispatch_queue_t)queue;
+@end
+
 @protocol RKSubscriptionHandle <NSObject>
 - (void)remove;
 @end
@@ -30,10 +38,18 @@
 @end
 
 typedef NS_OPTIONS(NSUInteger, RKSubscriptionEvent) {
-  RKSubscriptionEventCreated = 1 << 0,
+  RKSubscriptionEventCreate = 1 << 0,
   RKSubscriptionEventValueOnce = 1 << 1,
   RKSubscriptionEventDelete = 1 << 2,
-  RKSubscriptionEventValue = 1 << 3 | 1 << 2 | 1 << 1 | 1 << 0,
+  RKSubscriptionEventValueAll = 1 << 3 | 1 << 2 | 1 << 1 | 1 << 0,
+
+  RKSubscriptionEventChildAdd = 1 << 4,
+  RKSubscriptionEventChildUpdate = 1 << 5,
+  RKSubscriptionEventChildRemove = 1 << 6,
+  RKSubscriptionEventChildMove = 1 << 7,
+  RKSubscriptionEventChildAll = 1 << 7 | 1 << 6 | 1 << 5 | 1 << 4,
+
+  RKSubscriptionEventValue = RKSubscriptionEventValueAll | RKSubscriptionEventChildAll
 };
 
 typedef NS_ENUM(NSUInteger, RKDataSubscriberPolicy) {
@@ -41,11 +57,29 @@ typedef NS_ENUM(NSUInteger, RKDataSubscriberPolicy) {
   RKDataSubscriberPolicyCacheOnly,
 };
 
+@protocol RKNetworkSubscriber <NSObject>
+- (id<RKSubscriptionHandle>)subscribeToEntity:(id<RKEntityDescription>)entity
+                                        event:(RKSubscriptionEvent)event
+                                     callback:(void(^)(id<RKEntityValue> value))callback
+                                        queue:(dispatch_queue_t)queue;
+@end
+
 @interface RKDataSubscriber : NSObject
 
-- (instancetype)initWithCache:(id<RKCache>)cache;
-- (instancetype)initWithCache:(id<RKCache>)cache baseURL:(NSURL *)baseURL;
-- (instancetype)initWithCache:(id<RKCache>)cache baseURL:(NSURL *)baseURL policy:(RKDataSubscriberPolicy)policy;
+- (instancetype)initWithCache:(id<RKCache>)cache
+                      network:(id<RKNetworkSubscriber>)network
+                 keyGenerator:(RKEntityCacheKeyGenerator)keyGenerator;
+
+- (instancetype)initWithCache:(id<RKCache>)cache
+                      network:(id<RKNetworkSubscriber>)network
+                 keyGenerator:(RKEntityCacheKeyGenerator)keyGenerator
+                      baseURL:(NSURL *)baseURL;
+
+- (instancetype)initWithCache:(id<RKCache>)cache
+                      network:(id<RKNetworkSubscriber>)network
+                 keyGenerator:(RKEntityCacheKeyGenerator)keyGenerator
+                      baseURL:(NSURL *)baseURL
+                       policy:(RKDataSubscriberPolicy)policy;
 
 - (id<RKSubscriptionHandle>)subscribeToEntity:(id<RKEntityDescription>)entity
                                      callback:(void(^)(id<RKEntityValue> value))callback

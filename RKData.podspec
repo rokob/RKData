@@ -36,7 +36,11 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '6.0'
   s.requires_arc = true
 
-  s.source_files = 'RKData/RKData/**/*.{h,m}'
-
+  s.source_files = 'RKData/RKData/**/*.{h,m,mm}'
   s.public_header_files = 'RKData/**/*.h'
+
+  s.libraries = 'stdc++'
+  s.xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11',
+                 'CLANG_CXX_LIBRARY' => 'libc++',
+               }
 end
