@@ -1,0 +1,23 @@
+PODS:
+  - Expecta (0.2.4)
+  - OCMock (2.2.3)
+  - RKData (0.0.1)
+  - Specta (0.2.1)
+
+DEPENDENCIES:
+  - Expecta (~> 0.2.3)
+  - OCMock (~> 2.2)
+  - RKData (from `../`)
+  - Specta (~> 0.2.1)
+
+EXTERNAL SOURCES:
+  RKData:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Expecta: 5c147dedfea5fbcf773995f7e65020abcc936ce5
+  OCMock: 74e4ddbcef134170dcc844f91c691f13868075d7
+  RKData: bb29eff400b07206b3f00b5d1f686f4b18ce8dd9
+  Specta: 2d06220591110c6d9757d8be8ecf8e63aa40dc2a
+
+COCOAPODS: 0.29.0

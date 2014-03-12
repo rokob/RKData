@@ -1,37 +1,42 @@
-#
-# Be sure to run `pod spec lint NAME.podspec' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# To learn more about the attributes see http://guides.cocoapods.org/syntax/podspec.html
-#
 Pod::Spec.new do |s|
   s.name             = "RKData"
-  s.version          = "0.1.0"
-  s.summary          = "A short description of RKData."
+  s.version          = "0.0.1"
+  s.summary          = "RKData - A generic/configurable data layer"
   s.description      = <<-DESC
-                       An optional longer description of RKData
+                       =RKData
+                       There are a lot of common patterns when it comes to getting data
+                       from a server, caching it in memory and possibly on disk,
+                       querying/modifying that data locally and syncing that back up to
+                       the server.
 
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       It does not matter if you use a managed backend (e.g. Parse) or
+                       you have your own server set-up, the client side code is still
+                       basically the same. Furthermore, the programming model that Parse
+                       in particular encourages is not one that I find satisfying. That
+                       is not to knock on Parse, it is a perfectly reasonable model,
+                       I just think a fully async model is more appropriate to iOS
+                       development.
+
+                       I also don't conceptually care what backend (if there is one at all)
+                       is fulfilling data requests, I really care about what data I want.
+                       The goal of this library is to abstract much of those problems.
+                       Then, you should be able to plug and play any backend with minimal
+                       changes to that actual code.
+
+                       This is very much a work in progress, I wouldn't recommend
+                       anyone else try to use it for a while, which should be noted
+                       by the fact that this only exists in a private spec repo.
                        DESC
-  s.homepage         = "http://EXAMPLE/NAME"
-  s.screenshots      = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/rokob/RKData"
   s.license          = 'MIT'
-  s.author           = { "Andrew Ledvina" => "led@fb.com" }
-  s.source           = { :git => "http://EXAMPLE/NAME.git", :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/NAME'
+  s.author           = { "Andrew Ledvina" => "wvvwwvw@gmail.com" }
+  s.source           = { :git => "https://github.com/rokob/RKData.git", :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/wolfgangfabian'
 
-  # s.platform     = :ios, '5.0'
-  # s.ios.deployment_target = '5.0'
-  # s.osx.deployment_target = '10.7'
+  s.platform     = :ios, '6.0'
   s.requires_arc = true
 
-  s.source_files = 'Classes'
-  s.resources = 'Resources'
+  s.source_files = 'RKData/RKData/**/*.{h,m}'
 
-  s.ios.exclude_files = 'Classes/osx'
-  s.osx.exclude_files = 'Classes/ios'
-  # s.public_header_files = 'Classes/**/*.h'
-  # s.frameworks = 'SomeFramework', 'AnotherFramework'
-  # s.dependency 'JSONKit', '~> 1.4'
+  s.public_header_files = 'RKData/**/*.h'
 end
