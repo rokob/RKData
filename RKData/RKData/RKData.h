@@ -21,6 +21,14 @@
 - (void)setObject:(id)object forKey:(id)key;
 @end
 
+@interface RKSuperSimpleCache : NSMutableDictionary <RKCache>
+@end
+
+@interface RKSimpleCache : NSObject <RKCache>
+- (instancetype)initWithCapacity:(NSUInteger)capacity;
+- (instancetype)initWithCapacity:(NSUInteger)capacity compactionFactor:(double)compactionFactor;
+@end
+
 typedef NSUInteger(^RKEntityCacheKeyGenerator)(id<RKEntityDescription>);
 
 @protocol RKNetwork <NSObject>
